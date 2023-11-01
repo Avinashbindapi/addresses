@@ -6,6 +6,7 @@ $(document).ready(function(){
         $("#street").val('');
         $("#zip_code").val('');
         $("#city_id").val('');
+        $("#group_id").val('');
         $('#address_id').remove();
         $("#addressModal").show();
     });
@@ -23,7 +24,6 @@ $(document).ready(function(){
             }
         });
     });
-
     
     $(document).on("click", ".edit-address", function(){
         let id = $(this).data('id');

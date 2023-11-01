@@ -17,15 +17,17 @@ class Address extends DB {
     }
 
     public static function allWithCityName() {
-        $sql = "SELECT addresses.*, cities.city_name FROM addresses 
+        $sql = "SELECT addresses.*, cities.city_name, address_to_group.group_name FROM addresses 
                     LEFT JOIN cities ON addresses.city_id = cities.id;";
         $stmt = DB::get()->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     public static function getById($id) {
-        $sql = "SELECT * FROM addresses WHERE id = ?;";
+        $sql = "SELECT * FROM addresses 
+                LEFT JOIN address_to_group ON address_to_group.address_id = addresses.id
+                WHERE id = ?;";
         $stmt = DB::get()->prepare($sql);
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -40,6 +42,15 @@ class Address extends DB {
         $stmt->bindParam(':street', $data['street']);
         $stmt->bindParam(':zip_code', $data['zip_code']);
         $stmt->bindParam(':city_id', $data['city_id']);
+        $stmt->execute();
+        return $this->db->lastInsertId();
+    }
+
+    public function addressToGroup($grupId, $addressId) {
+        $sql = 'INSERT INTO address_to_group (group_id, address_id) VALUES (:group_id, :address_id)';
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':group_id', $grupId);
+        $stmt->bindParam(':address_id', $addressId);
         return $stmt->execute();
     }
 

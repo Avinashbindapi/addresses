@@ -19,3 +19,10 @@ CREATE TABLE groups (
     group_name VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE `address_book`.`address_to_group` (
+  `group_id` INT(11) NOT NULL   ,
+  `address_id` INT(11) NOT NULL 
+) ENGINE = InnoDB; 
+
+ALTER TABLE `address_to_group` DROP PRIMARY KEY, ADD PRIMARY KEY(`group_id`, `address_id`); 

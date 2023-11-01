@@ -81,6 +81,36 @@
                         </select>
                     </div>
 
+                    <div class="form-group">
+                        <label for="group_id" class="form-label">Group:</label>
+                        <select name="group" id="group" class="form-input">
+                            <option value="">Select Group</option>
+                            <?php foreach($groups as $group) : ?>
+                                <?php if($group['parent_id'] == 0) : ?>
+                                    <option value="<?php echo $group['id']; ?>"><?php echo $group['group_name']; ?></option>
+                                    <?php printChildGroups($groups, $group['id'], 1);
+                                    ?>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </select>
+
+                        <?php
+                        function printChildGroups($data, $parent_id, $indentLevel)
+                        {
+                            foreach($data as $group) {
+                                if($group['parent_id'] == $parent_id) {
+                                    echo '<option value="' . $group['id'] . '">';
+                                    for($i = 0; $i < $indentLevel; $i++) {
+                                        echo '--';
+                                    }
+                                    echo $group['group_name'] . '</option>';
+                                    printChildGroups($data, $group['id'], $indentLevel + 1);
+                                }
+                            }
+                        }
+                    ?>
+                    </div>
+
                     <div class="form-group form-actions">
                         <input type="submit" value="Save Address" class="form-button">
                     </div>
